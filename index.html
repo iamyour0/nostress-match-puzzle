@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NoStress Match Puzzle</title>
+<style>
+:root{--bg:#101426;--panel:#1b2340;--panel2:#252f50;--line:#39466c;--text:#f5f6ff;--muted:#b1bad4;--accent:#ffd36e;--mint:#7de6c1}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -15%,#3c4778 0,#1b2140 42%,#0d1222 100%);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,select,input{font:inherit}button{cursor:pointer;color:inherit;border:0}button:disabled{opacity:.4;cursor:not-allowed}
+.wrap{max-width:1120px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:27px;background:linear-gradient(135deg,#ffe18a,#ff9dba);box-shadow:0 8px 25px #ffb4c944}h1{font-size:23px;margin:0}.sub{color:var(--muted);font-size:12px}.topbtns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{background:#344264;border:1px solid #52648c;border-radius:11px;padding:9px 13px;font-weight:800}.btn:hover{filter:brightness(1.12)}.btn.primary{background:linear-gradient(135deg,#ffe18a,#ffad65);color:#38230d;border:0}.btn.mint{background:linear-gradient(135deg,#8cf0cc,#47cba1);color:#12372d;border:0}.btn.sm{font-size:12px;padding:7px 10px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}.stat,.panel{background:linear-gradient(145deg,#252f50,#171e36);border:1px solid var(--line);border-radius:16px}.stat{padding:12px 14px}.stat small{color:var(--muted);font-size:12px}.stat strong{display:block;font-size:23px;margin-top:3px}.stat .hint{font-size:11px;color:var(--mint)}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;align-items:start}.panel{padding:15px}.boardpanel{min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}.panel h2{font-size:17px;margin:0}.boardwrap{display:flex;justify-content:center;padding:10px;background:linear-gradient(145deg,#111a31,#1a2441);border:1px solid #344365;border-radius:16px}.board{width:min(100%,590px);aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);gap:5px;touch-action:manipulation}.cell{min-width:0;min-height:0;display:grid;place-items:center;border-radius:11px;background:#293654;border:1px solid #3b4a6b;position:relative;transition:transform .12s,filter .12s}.cell:focus-visible{outline:3px solid white}.cell.selected{outline:3px solid #fff2a5;transform:scale(.94);box-shadow:0 0 0 4px #ffd36e55}.cell.hint{outline:3px dashed #9ff3d7;animation:pulse .7s infinite alternate}.gem{width:78%;height:78%;display:grid;place-items:center;border-radius:27%;font-size:clamp(17px,3.2vw,31px);font-weight:900;box-shadow:inset 0 3px 5px #ffffff77,inset 0 -5px 7px #0003,0 3px 5px #0004;user-select:none}.gem.red{background:linear-gradient(145deg,#ff9eae,#e84d75)}.gem.blue{background:linear-gradient(145deg,#a5d8ff,#4c8fe8)}.gem.green{background:linear-gradient(145deg,#a8f2c8,#35b987)}.gem.yellow{background:linear-gradient(145deg,#fff1a2,#f3bd39)}.gem.purple{background:linear-gradient(145deg,#e0b7ff,#9b69db)}.gem.orange{background:linear-gradient(145deg,#ffd0a0,#f08b43)}.gem.special{border-radius:50%;outline:3px solid #fff8;outline-offset:-5px}.cell.empty{background:#202b47}.cell.empty .gem{visibility:hidden}@keyframes pulse{to{filter:brightness(1.35)}}
+.boardactions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px}.status{margin-top:10px;text-align:center;min-height:24px;color:#cbd7f1;font-size:13px}.side{display:flex;flex-direction:column;gap:14px}.option{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #354260}.option:last-child{border:0}.option label{font-size:13px;font-weight:700}.option small{display:block;color:var(--muted);font-size:10px;font-weight:400}.option input[type=checkbox]{width:19px;height:19px;accent-color:#70dfb8}.option select{max-width:135px;background:#101a30;color:white;border:1px solid #506184;border-radius:8px;padding:6px}.togglegroup{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.togglegroup button{padding:8px 6px;border-radius:9px;background:#303d5d;border:1px solid #4b5d82;font-size:11px;font-weight:800}.togglegroup button.active{background:#ffe08a;color:#35250c;border-color:#ffe08a}
+.tip{font-size:12px;color:var(--muted);line-height:1.55}.tip strong{color:#fff}.scorebar{height:8px;background:#303d5b;border-radius:20px;overflow:hidden;margin-top:7px}.scorebar i{display:block;height:100%;background:linear-gradient(90deg,#65e5bd,#ffe18a);width:0}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,18px);opacity:0;pointer-events:none;background:#eaf9f1;color:#15382d;padding:10px 15px;border-radius:12px;font-weight:850;box-shadow:0 10px 35px #0008;transition:.2s;z-index:20}.toast.show{opacity:1;transform:translate(-50%,0)}
+.modalbg{display:none;position:fixed;inset:0;background:#060a16cc;z-index:30;place-items:center;padding:18px}.modalbg.show{display:grid}.modal{width:min(450px,100%);padding:21px;border-radius:18px;background:#202b49;border:1px solid #58698f;box-shadow:0 20px 70px #0009}.modal h2{margin:0 0 8px}.modal p{color:#c2cce3;font-size:13px}.modalactions{display:flex;justify-content:flex-end;gap:8px;margin-top:15px}
+footer{text-align:center;color:#8794b5;font-size:11px;padding:18px}
+@media(max-width:850px){.main{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.board{max-width:590px}}
+@media(max-width:520px){.wrap{padding:10px}.stats{grid-template-columns:repeat(2,1fr);gap:7px}.stat{padding:10px}.stat strong{font-size:20px}.side{grid-template-columns:1fr}.board{gap:3px}.cell{border-radius:8px}.boardwrap{padding:6px}.topbtns{width:100%}.topbtns button{flex:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+ <div class="brand"><div class="logo">💎</div><div><h1>NoStress Match Puzzle</h1><div class="sub">서두르지 말고, 마음 편하게 보석을 맞춰보세요</div></div></div>
+ <div class="topbtns"><button class="btn" id="newBtn">↻ 새 게임</button><button class="btn" id="saveBtn">💾 저장</button></div>
+</header>
+<section class="stats">
+ <div class="stat"><small>점수</small><strong id="score">0</strong><div class="hint" id="best">최고 기록 0</div></div>
+ <div class="stat"><small>남은 이동</small><strong id="moves">∞</strong><div class="hint">이동 제한 옵션에서 변경</div></div>
+ <div class="stat"><small>목표 점수</small><strong id="goal">5,000</strong><div class="hint" id="goalhint">목표까지 5,000</div></div>
+ <div class="stat"><small>연속 매치</small><strong id="combo">x0</strong><div class="hint">연쇄 매치 보너스</div></div>
+</section>
+<div class="main">
+ <main class="panel boardpanel">
+  <div class="panelhead"><h2>✨ 보석 정원</h2><span class="sub" id="modeLabel">편안한 모드</span></div>
+  <div class="boardwrap"><div class="board" id="board" role="grid" aria-label="보석 게임판"></div></div>
+  <div class="boardactions">
+   <button class="btn mint" id="undoBtn">↶ 되돌리기</button>
+   <button class="btn" id="hintBtn">💡 힌트</button>
+   <button class="btn" id="shuffleBtn">🔀 섞기</button>
+  </div>
+  <div class="status" id="status" aria-live="polite">보석 하나를 누르고 이웃한 보석을 선택해 자리를 바꿔보세요.</div>
+ </main>
+ <aside class="side">
+  <section class="panel">
+   <div class="panelhead"><h2>🧘 편안함 옵션</h2><span class="sub">언제든 변경 가능</span></div>
+   <div class="option"><div><label for="timerOpt">시간 제한</label><small>끄면 시간에 쫓기지 않아요</small></div><input id="timerOpt" type="checkbox"></div>
+   <div class="option"><div><label for="movesOpt">이동 횟수 제한</label><small>끄면 무제한으로 플레이</small></div><input id="movesOpt" type="checkbox"></div>
+   <div class="option"><div><label for="invalidOpt">불가능한 이동 허용</label><small>잘못 움직여도 이동 횟수 차감 없음</small></div><input id="invalidOpt" type="checkbox" checked></div>
+   <div class="option"><div><label for="autoHintOpt">자동 힌트</label><small>잠시 고민하면 가능한 수 표시</small></div><input id="autoHintOpt" type="checkbox"></div>
+   <div class="option"><div><label for="soundOpt">효과음</label><small>끄면 소리 없이 플레이</small></div><input id="soundOpt" type="checkbox"></div>
+   <div class="option"><div><label for="motionOpt">화려한 효과</label><small>끄면 움직임을 최소화</small></div><input id="motionOpt" type="checkbox" checked></div>
+   <div class="option"><div><label for="shapeOpt">모양 표시</label><small>색상 구분이 어려우면 켜세요</small></div><input id="shapeOpt" type="checkbox"></div>
+   <div class="option"><label for="colorsOpt">보석 종류</label><select id="colorsOpt"><option value="4">4종류 · 쉬움</option><option value="5" selected>5종류 · 보통</option><option value="6">6종류 · 도전</option></select></div>
+   <div class="option"><label for="goalOpt">목표 점수</label><select id="goalOpt"><option value="0">목표 없음</option><option value="3000">3,000 · 가볍게</option><option value="5000" selected>5,000 · 기본</option><option value="10000">10,000 · 길게</option></select></div>
+   <div class="option"><label for="timeOpt">제한 시간</label><select id="timeOpt"><option value="60">60초</option><option value="120" selected>120초</option><option value="180">180초</option></select></div>
+   <div class="tip" style="margin-top:12px">옵션은 언제든 바꿀 수 있어요. <strong>시간 제한과 이동 횟수 제한은 기본으로 꺼져 있습니다.</strong> 목표를 달성해도 게임이 강제로 끝나지 않아요.</div>
+  </section>
+  <section class="panel">
+   <div class="panelhead"><h2>🎮 플레이 방식</h2></div>
+   <div class="tip">① 보석을 선택하세요.<br>② 위·아래·왼쪽·오른쪽 이웃 보석을 선택해 교환하세요.<br>③ 같은 보석 3개 이상을 한 줄로 맞추면 점수를 얻어요.<br><br><strong>특수 보석</strong><br>4개를 맞추면 줄 폭발 보석, 5개 이상을 맞추면 주변을 지우는 보석이 만들어져요.<br><br><strong>실수해도 괜찮아요.</strong> 되돌리기, 힌트, 섞기를 자유롭게 사용할 수 있어요.</div>
+  </section>
+  <section class="panel">
+   <div class="panelhead"><h2>🌟 진행 상황</h2></div>
+   <div class="tip" id="progressText">아직 첫 매치를 기다리고 있어요.</div><div class="scorebar"><i id="progressBar"></i></div>
+  </section>
+ </aside>
+</div>
+<footer>NoStress Match Puzzle · 시간 압박 없이 즐기는 매치 퍼즐</footer>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modalbg" id="modal"><div class="modal"><h2 id="modalTitle">안내</h2><p id="modalText"></p><div class="modalactions"><button class="btn" id="modalCancel">닫기</button><button class="btn primary" id="modalOK">확인</button></div></div></div>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const SIZE=8, COLORS=['red','blue','green','yellow','purple','orange'], SYMBOLS=['●','◆','■','★','✿','⬟'];
+const defaults={timer:false,moves:false,invalid:true,autoHint:false,sound:false,motion:true,shape:false,colors:5,goal:5000,time:120};
+let opt={...defaults},board=[],score=0,moves=0,combo=0,selected=null,undoState=null,seconds=0,timerId=null,hintTimer=null,gameOver=false,started=false,toastTimer=null,modalCallback=null;
+let best=Number(localStorage.getItem('nsmatchBest')||0);
+const clone=x=>JSON.parse(JSON.stringify(x));
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2100)}
+function randColor(){return Math.floor(Math.random()*Number(opt.colors))}
+function freshCell(){return {c:randColor(),s:''}}
+function wouldMatchAt(b,r,c,color){let n=1;for(let x=c-1;x>=0&&b[r][x]?.c===color;x--)n++;for(let x=c+1;x<SIZE&&b[r][x]?.c===color;x++)n++;if(n>=3)return true;n=1;for(let y=r-1;y>=0&&b[y][c]?.c===color;y--)n++;for(let y=r+1;y<SIZE&&b[y][c]?.c===color;y++)n++;return n>=3}
+function makeBoard(){let b=Array.from({length:SIZE},()=>Array(SIZE).fill(null));for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){let tries=0,cell;do{cell=freshCell();tries++}while(tries<30&&wouldMatchAt(b,r,c,cell.c));b[r][c]=cell}return b}
+function matches(b=board){let found=new Set(),groups=[];for(let r=0;r<SIZE;r++){let start=0;while(start<SIZE){let end=start+1;while(end<SIZE&&b[r][end]&&b[r][start]&&b[r][end].c===b[r][start].c)end++;if(b[r][start]&&end-start>=3){let g=[];for(let c=start;c<end;c++){found.add(r*SIZE+c);g.push([r,c])}groups.push(g)}start=end}}
+for(let c=0;c<SIZE;c++){let start=0;while(start<SIZE){let end=start+1;while(end<SIZE&&b[end][c]&&b[start][c]&&b[end][c].c===b[start][c].c)end++;if(b[start][c]&&end-start>=3){let g=[];for(let r=start;r<end;r++){found.add(r*SIZE+c);g.push([r,c])}groups.push(g)}start=end}}
+return {found,groups}}
+function hasMove(b=board){for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){for(const [dr,dc] of [[1,0],[0,1]]){let rr=r+dr,cc=c+dc;if(rr>=SIZE||cc>=SIZE)continue;[b[r][c],b[rr][cc]]=[b[rr][cc],b[r][c]];let ok=matches(b).found.size>0;[b[r][c],b[rr][cc]]=[b[rr][cc],b[r][c]];if(ok)return true}}return false}
+function findMove(){for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++)for(const [dr,dc] of [[1,0],[0,1]]){let rr=r+dr,cc=c+dc;if(rr>=SIZE||cc>=SIZE)continue;[board[r][c],board[rr][cc]]=[board[rr][cc],board[r][c]];let ok=matches().found.size>0;[board[r][c],board[rr][cc]]=[board[rr][cc],board[r][c]];if(ok)return [[r,c],[rr,cc]]}return null}
+function ensureMoves(){let tries=0;while(!hasMove()&&tries++<30)board=makeBoard()}
+function render(){const root=$('board');root.innerHTML='';for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){const cell=board[r][c],el=document.createElement('button');el.className='cell'+(selected&&selected[0]===r&&selected[1]===c?' selected':'');el.type='button';el.setAttribute('role','gridcell');el.setAttribute('aria-label',cell?COLORS[cell.c]+' 보석':'빈칸');el.dataset.r=r;el.dataset.c=c;if(cell){const gem=document.createElement('span');gem.className='gem '+COLORS[cell.c]+(cell.s?' special':'');gem.textContent=opt.shape?SYMBOLS[cell.c]:'';if(cell.s==='line')gem.textContent=opt.shape?'↕':'✦';if(cell.s==='burst')gem.textContent=opt.shape?'✹':'💥';el.append(gem)}else el.classList.add('empty');root.append(el)}
+$('score').textContent=score.toLocaleString();$('best').textContent='최고 기록 '+best.toLocaleString();$('moves').textContent=opt.moves?Math.max(0,30-moves):'∞';$('goal').textContent=opt.goal?opt.goal.toLocaleString():'없음';$('goalhint').textContent=opt.goal?'목표까지 '+Math.max(0,opt.goal-score).toLocaleString():'자유 플레이';$('combo').textContent='x'+combo;$('modeLabel').textContent=opt.timer?'타임 챌린지':opt.moves?'이동 제한 모드':'편안한 모드';$('undoBtn').disabled=!undoState;$('progressText').textContent=opt.goal?(score>=opt.goal?'목표 달성! 계속 플레이할 수 있어요.':`목표 점수까지 ${Math.max(0,opt.goal-score).toLocaleString()}점 남았어요.`):'자유롭게 점수를 쌓아보세요.';$('progressBar').style.width=opt.goal?Math.min(100,score/opt.goal*100)+'%':'0%';if(opt.timer)$('status').textContent='남은 시간 '+Math.max(0,opt.time-seconds)+'초 · 시간 제한은 옵션에서 끌 수 있어요.'}
+function saveSnapshot(){undoState={board:clone(board),score,moves,combo,seconds};}
+function restoreUndo(){if(!undoState)return;board=clone(undoState.board);score=undoState.score;moves=undoState.moves;combo=undoState.combo;seconds=undoState.seconds;undoState=null;selected=null;gameOver=false;render();toast('한 번 되돌렸어요.')}
+function swap(a,b){[board[a[0]][a[1]],board[b[0]][b[1]]]=[board[b[0]][b[1]],board[a[0]][a[1]]]}
+function adjacent(a,b){return Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1])===1}
+function specialCreate(groups){let candidate=null;for(const g of groups){if(g.length>=5){candidate=g[Math.floor(g.length/2)];board[candidate[0]][candidate[1]].s='burst';break}if(g.length===4&&!candidate){candidate=g[Math.floor(g.length/2)];board[candidate[0]][candidate[1]].s='line'}}return candidate}
+function resolve(){let chain=0;function step(){let m=matches();if(!m.found.size){combo=chain;ensureMoves();render();if(chain>1)toast('연쇄 매치 x'+chain+'! 보너스 점수!');checkGoal();return}
+chain++;let special=specialCreate(m.groups),clear=new Set(m.found);
+if(special)clear.delete(special[0]*SIZE+special[1]);
+for(const idx of [...clear]){let r=Math.floor(idx/SIZE),c=idx%SIZE,cell=board[r][c];if(cell?.s==='line'){for(let x=0;x<SIZE;x++)clear.add(r*SIZE+x);for(let y=0;y<SIZE;y++)clear.add(y*SIZE+c)}else if(cell?.s==='burst'){for(let y=Math.max(0,r-1);y<=Math.min(SIZE-1,r+1);y++)for(let x=Math.max(0,c-1);x<=Math.min(SIZE-1,c+1);x++)clear.add(y*SIZE+x)}}
+score+=clear.size*10*chain;if(score>best){best=score;localStorage.setItem('nsmatchBest',String(best))}
+for(const idx of clear){let r=Math.floor(idx/SIZE),c=idx%SIZE;if(board[r][c])board[r][c]=null}
+for(let c=0;c<SIZE;c++){let write=SIZE-1;for(let r=SIZE-1;r>=0;r--)if(board[r][c]){board[write][c]=board[r][c];write--}for(let r=write;r>=0;r--)board[r][c]=freshCell()}
+if(opt.motion){render();setTimeout(step,180)}else step()}
+step()}
+function checkGoal(){if(opt.goal&&score>=opt.goal){$('status').textContent='🎉 목표 달성! 계속 플레이하거나 새 게임을 시작할 수 있어요.';toast('목표 달성! 축하해요!')}if(opt.moves&&moves>=30&&!gameOver){gameOver=true;ask('이동 횟수를 모두 사용했어요','점수는 저장됐어요. 다시 시작하거나 이동 제한 옵션을 끄고 계속 즐길 수 있어요.',()=>newGame())}}
+function selectCell(r,c){if(gameOver)return;if(!selected){selected=[r,c];render();return}if(selected[0]===r&&selected[1]===c){selected=null;render();return}const target=[r,c],first=selected;selected=null;if(!adjacent(first,target)){selected=target;render();return}saveSnapshot();swap(first,target);if(matches().found.size){moves++;render();resolve()}else{swap(first,target);undoState=null;render();$('status').textContent=opt.invalid?'이 조합은 매치가 되지 않아요. 다른 보석을 골라보세요.':'매치가 되지 않아 원래 자리로 돌아왔어요.';if(!opt.invalid)toast('매치가 만들어지는 이동만 할 수 있어요.');}}
+function hint(){const move=findMove();if(!move){ensureMoves();render();return}selected=null;render();const [a,b]=move;for(const [r,c] of [a,b]){const el=$('board').querySelector(`[data-r="${r}"][data-c="${c}"]`);if(el)el.classList.add('hint')}$('status').textContent='반짝이는 두 보석을 서로 바꿔보세요.'}
+function shuffle(){board=makeBoard();ensureMoves();selected=null;undoState=null;render();toast('새로운 보석 배열을 만들었어요.')}
+function newGame(){if(timerId)clearInterval(timerId);if(hintTimer)clearTimeout(hintTimer);score=0;moves=0;combo=0;seconds=0;selected=null;undoState=null;gameOver=false;started=true;board=makeBoard();ensureMoves();render();$('status').textContent='새 게임 시작! 서두르지 말고 편안하게 플레이하세요.';if(opt.timer){timerId=setInterval(()=>{seconds++;if(seconds>=opt.time){clearInterval(timerId);gameOver=true;ask('시간이 끝났어요','원한다면 시간 제한을 끄고 자유롭게 계속 즐길 수 있어요.',()=>newGame())}else render()},1000)}if(opt.autoHint)startAutoHint()}
+function startAutoHint(){if(hintTimer)clearTimeout(hintTimer);hintTimer=setTimeout(()=>{if(!selected&&!gameOver)hint();},12000)}
+function ask(title,text,cb){$('modalTitle').textContent=title;$('modalText').textContent=text;$('modal').classList.add('show');modalCallback=cb||null}
+$('modalCancel').onclick=()=>{$('modal').classList.remove('show');modalCallback=null};$('modalOK').onclick=()=>{const cb=modalCallback;$('modal').classList.remove('show');modalCallback=null;if(cb)cb()};
+$('board').addEventListener('click',e=>{const cell=e.target.closest('.cell');if(!cell)return;selectCell(Number(cell.dataset.r),Number(cell.dataset.c));if(opt.autoHint)startAutoHint()});
+$('undoBtn').onclick=restoreUndo;$('hintBtn').onclick=hint;$('shuffleBtn').onclick=shuffle;$('newBtn').onclick=()=>ask('새 게임','현재 판을 끝내고 새 게임을 시작할까요?',newGame);
+$('saveBtn').onclick=()=>{try{localStorage.setItem('nsmatchSave',JSON.stringify({board,score,moves,combo,seconds,opt}));toast('현재 게임을 저장했어요.')}catch(e){toast('저장할 수 없습니다.')}};
+function bindOption(id,key,convert){$(id).addEventListener('change',()=>{opt[key]=convert?convert($(id).value):$(id).checked;if(key==='timer'){if(timerId)clearInterval(timerId);timerId=null;seconds=0;if(opt.timer){timerId=setInterval(()=>{seconds++;if(seconds>=opt.time){clearInterval(timerId);gameOver=true;ask('시간이 끝났어요','시간 제한을 끄거나 새 게임을 시작할 수 있어요.',()=>newGame())}render()},1000)}}if(key==='autoHint'&&opt.autoHint)startAutoHint();render()})}
+bindOption('timerOpt','timer');bindOption('movesOpt','moves');bindOption('invalidOpt','invalid');bindOption('autoHintOpt','autoHint');bindOption('soundOpt','sound');bindOption('motionOpt','motion');bindOption('shapeOpt','shape');bindOption('colorsOpt','colors',Number);bindOption('goalOpt','goal',Number);bindOption('timeOpt','time',Number);
+function applyOptions(){for(const [id,key] of [['timerOpt','timer'],['movesOpt','moves'],['invalidOpt','invalid'],['autoHintOpt','autoHint'],['soundOpt','sound'],['motionOpt','motion'],['shapeOpt','shape'],['colorsOpt','colors'],['goalOpt','goal'],['timeOpt','time']])$(id).type==='checkbox'?$(id).checked=opt[key]:$(id).value=String(opt[key])}
+try{const raw=localStorage.getItem('nsmatchSave');if(raw){const data=JSON.parse(raw);if(data&&Array.isArray(data.board)&&data.board.length===SIZE){board=data.board;score=Number(data.score)||0;moves=Number(data.moves)||0;combo=Number(data.combo)||0;seconds=Number(data.seconds)||0;opt={...defaults,...data.opt};started=true}}}catch(e){}
+applyOptions();if(!board.length)newGame();else{ensureMoves();render();$('status').textContent='저장된 게임을 불러왔어요.';if(opt.timer){timerId=setInterval(()=>{seconds++;if(seconds>=opt.time){clearInterval(timerId);gameOver=true;ask('시간이 끝났어요','시간 제한을 끄거나 새 게임을 시작할 수 있어요.',()=>newGame())}render()},1000)}}
+})();
+</script>
+</body>
+</html>
