@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NoStress Match Puzzle</title>
+<title>NoStress Match Puzzle - Relaxing Jewel Match Game</title>
 <style>
 :root{--bg:#101426;--panel:#1b2340;--panel2:#252f50;--line:#39466c;--text:#f5f6ff;--muted:#b1bad4;--accent:#ffd36e;--mint:#7de6c1}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -15%,#3c4778 0,#1b2140 42%,#0d1222 100%);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -50,64 +50,64 @@ footer{text-align:center;color:#8794b5;font-size:11px;padding:18px}
 <body>
 <div class="wrap">
 <header class="top">
- <div class="brand"><div class="logo">💎</div><div><h1>NoStress Match Puzzle</h1><div class="sub">서두르지 말고, 마음 편하게 보석을 맞춰보세요</div></div></div>
- <div class="topbtns"><button class="btn" id="newBtn">↻ 새 게임</button><button class="btn" id="saveBtn">💾 저장</button></div>
+ <div class="brand"><div class="logo">💎</div><div><h1>NoStress Match Puzzle</h1><div class="sub">Match jewels at your own pace and relax.</div></div></div>
+ <div class="topbtns"><button class="btn" id="newBtn">↻ New Game</button><button class="btn" id="saveBtn">💾 Save</button></div>
 </header>
 <section class="stats">
- <div class="stat"><small>점수</small><strong id="score">0</strong><div class="hint" id="best">최고 기록 0</div></div>
- <div class="stat"><small>남은 이동</small><strong id="moves">∞</strong><div class="hint">이동 제한 옵션에서 변경</div></div>
- <div class="stat"><small>목표 점수</small><strong id="goal">5,000</strong><div class="hint" id="goalhint">목표까지 5,000</div></div>
- <div class="stat"><small>연속 매치</small><strong id="combo">x0</strong><div class="hint">연쇄 매치 보너스</div></div>
+ <div class="stat"><small>Score</small><strong id="score">0</strong><div class="hint" id="best">Best: 0</div></div>
+ <div class="stat"><small>Moves Left</small><strong id="moves">∞</strong><div class="hint">Change in move-limit options</div></div>
+ <div class="stat"><small>Target Score</small><strong id="goal">5,000</strong><div class="hint" id="goalhint">To go: 5,000</div></div>
+ <div class="stat"><small>Combo</small><strong id="combo">x0</strong><div class="hint">Chain bonus</div></div>
 </section>
 <div class="main">
  <main class="panel boardpanel">
-  <div class="panelhead"><h2>✨ 보석 정원</h2><span class="sub" id="modeLabel">편안한 모드</span></div>
-  <div class="boardwrap" id="boardwrap"><div class="fx-layer" id="fxLayer"></div><div class="board" id="board" role="grid" aria-label="보석 게임판"></div></div>
+  <div class="panelhead"><h2>✨ Jewel Garden</h2><span class="sub" id="modeLabel">Relaxed Mode</span></div>
+  <div class="boardwrap" id="boardwrap"><div class="fx-layer" id="fxLayer"></div><div class="board" id="board" role="grid" aria-label="Jewel game board"></div></div>
   <div class="boardactions">
-   <button class="btn mint" id="undoBtn">↶ 되돌리기</button>
-   <button class="btn" id="hintBtn">💡 힌트</button>
-   <button class="btn" id="shuffleBtn">🔀 섞기</button>
+   <button class="btn mint" id="undoBtn">↶ Undo</button>
+   <button class="btn" id="hintBtn">💡 Hint</button>
+   <button class="btn" id="shuffleBtn">🔀 Shuffle</button>
   </div>
-  <div class="status" id="status" aria-live="polite">보석 하나를 누르고 이웃한 보석을 선택해 자리를 바꿔보세요.</div>
+  <div class="status" id="status" aria-live="polite">Select a jewel, then select an adjacent jewel to swap them.</div>
  </main>
  <aside class="side">
   <section class="panel">
-   <div class="panelhead"><h2>🧘 편안함 옵션</h2><span class="sub">언제든 변경 가능</span></div>
-   <div class="option"><div><label for="timerOpt">시간 제한</label><small>끄면 시간에 쫓기지 않아요</small></div><input id="timerOpt" type="checkbox"></div>
-   <div class="option"><div><label for="movesOpt">이동 횟수 제한</label><small>끄면 무제한으로 플레이</small></div><input id="movesOpt" type="checkbox"></div>
-   <div class="option"><div><label for="invalidOpt">불가능한 이동 허용</label><small>잘못 움직여도 이동 횟수 차감 없음</small></div><input id="invalidOpt" type="checkbox" checked></div>
-   <div class="option"><div><label for="autoHintOpt">자동 힌트</label><small>잠시 고민하면 가능한 수 표시</small></div><input id="autoHintOpt" type="checkbox"></div>
-   <div class="option"><div><label for="soundOpt">효과음</label><small>끄면 소리 없이 플레이</small></div><input id="soundOpt" type="checkbox"></div>
-   <div class="option"><div><label for="motionOpt">화려한 효과</label><small>끄면 움직임을 최소화</small></div><input id="motionOpt" type="checkbox" checked></div>
-   <div class="option"><label for="fxOpt">이펙트 강도</label><select id="fxOpt"><option value="low">은은하게</option><option value="normal" selected>화려하게</option><option value="high">아주 화려하게</option></select></div>
-    <div class="option"><div><label for="shapeOpt">모양 표시</label><small>색상 구분이 어려우면 켜세요</small></div><input id="shapeOpt" type="checkbox"></div>
-   <div class="option"><label for="colorsOpt">보석 종류</label><select id="colorsOpt"><option value="4">4종류 · 쉬움</option><option value="5" selected>5종류 · 보통</option><option value="6">6종류 · 도전</option></select></div>
-   <div class="option"><label for="goalOpt">목표 점수</label><select id="goalOpt"><option value="0">목표 없음</option><option value="3000">3,000 · 가볍게</option><option value="5000" selected>5,000 · 기본</option><option value="10000">10,000 · 길게</option></select></div>
-   <div class="option"><label for="timeOpt">제한 시간</label><select id="timeOpt"><option value="60">60초</option><option value="120" selected>120초</option><option value="180">180초</option></select></div>
-   <div class="tip" style="margin-top:12px">옵션은 언제든 바꿀 수 있어요. <strong>시간 제한과 이동 횟수 제한은 기본으로 꺼져 있습니다.</strong> 목표를 달성해도 게임이 강제로 끝나지 않아요.</div>
+   <div class="panelhead"><h2>🧘 Relaxation Options</h2><span class="sub">Change anytime</span></div>
+   <div class="option"><div><label for="timerOpt">Time Limit</label><small>Turn off to play without pressure</small></div><input id="timerOpt" type="checkbox"></div>
+   <div class="option"><div><label for="movesOpt">Move Limit</label><small>Turn off for unlimited moves</small></div><input id="movesOpt" type="checkbox"></div>
+   <div class="option"><div><label for="invalidOpt">Allow Invalid Moves</label><small>Invalid moves won’t use a move</small></div><input id="invalidOpt" type="checkbox" checked></div>
+   <div class="option"><div><label for="autoHintOpt">Auto Hint</label><small>Show a hint if you pause</small></div><input id="autoHintOpt" type="checkbox"></div>
+   <div class="option"><div><label for="soundOpt">Sound Effects</label><small>Turn off for silent play</small></div><input id="soundOpt" type="checkbox"></div>
+   <div class="option"><div><label for="motionOpt">Visual Effects</label><small>Turn off to reduce animation</small></div><input id="motionOpt" type="checkbox" checked></div>
+   <div class="option"><label for="fxOpt">Effect Intensity</label><select id="fxOpt"><option value="low">Subtle</option><option value="normal" selected>Normal</option><option value="high">Very Intense</option></select></div>
+    <div class="option"><div><label for="shapeOpt">Show Shapes</label><small>Enable if colors are hard to distinguish</small></div><input id="shapeOpt" type="checkbox"></div>
+   <div class="option"><label for="colorsOpt">Gem Types</label><select id="colorsOpt"><option value="4">4 Types · Easy</option><option value="5" selected>5 Types · Normal</option><option value="6">6 Types · Challenge</option></select></div>
+   <div class="option"><label for="goalOpt">Target Score</label><select id="goalOpt"><option value="0">No Target</option><option value="3000">3,000 · Casual</option><option value="5000" selected>5,000 · Default</option><option value="10000">10,000 · Long Play</option></select></div>
+   <div class="option"><label for="timeOpt">Time Limit Duration</label><select id="timeOpt"><option value="60">60 sec</option><option value="120" selected>120 sec</option><option value="180">180 sec</option></select></div>
+   <div class="tip" style="margin-top:12px">You can change options anytime. <strong>Time and move limits are off by default.</strong> Reaching your target will not end the game.</div>
   </section>
   <section class="panel">
-   <div class="panelhead"><h2>🎮 플레이 방식</h2></div>
-   <div class="tip">① 보석을 선택하세요.<br>② 위·아래·왼쪽·오른쪽 이웃 보석을 선택해 교환하세요.<br>③ 같은 보석 3개 이상을 한 줄로 맞추면 점수를 얻어요.<br><br><strong>특수 보석</strong><br>4개를 맞추면 줄 폭발 보석, 5개 이상을 맞추면 주변을 지우는 보석이 만들어져요.<br><br><strong>실수해도 괜찮아요.</strong> 되돌리기, 힌트, 섞기를 자유롭게 사용할 수 있어요.</div>
+   <div class="panelhead"><h2>🎮 How to Play</h2></div>
+   <div class="tip">① Select a jewel.<br>② Select an adjacent jewel (up, down, left, or right) to swap.<br>③ Match 3 or more jewels in a row to score points.<br><br><strong>Special Jewels</strong><br>Match 4 to create a line-clearing jewel. Match 5 or more to create a jewel that clears nearby gems.<br><br><strong>No worries!</strong> Use Undo, Hint, and Shuffle whenever you like.</div>
   </section>
   <section class="panel">
-   <div class="panelhead"><h2>🌟 진행 상황</h2></div>
-   <div class="tip" id="progressText">아직 첫 매치를 기다리고 있어요.</div><div class="scorebar"><i id="progressBar"></i></div>
+   <div class="panelhead"><h2>🌟 Progress</h2></div>
+   <div class="tip" id="progressText">Ready for your first match!</div><div class="scorebar"><i id="progressBar"></i></div>
     <div class="missionbox">
-      <div><span class="stage-chip" id="stageLabel">STAGE 1</span><strong id="missionTitle">오늘의 보석 미션</strong></div>
-      <div class="tip" id="missionText">빨간 보석 30개 모으기</div>
+      <div><span class="stage-chip" id="stageLabel">STAGE 1</span><strong id="missionTitle">Gem Mission</strong></div>
+      <div class="tip" id="missionText">Collect 30 red gems</div>
       <div class="missionbar"><i id="missionBar"></i></div>
       <div class="tip" id="missionCount">0 / 30</div>
-      <button class="btn primary sm" id="chestBtn" disabled>🎁 보상 상자 · 미션 완료 후 열기</button>
-      <div class="tip" id="rewardText">스테이지 보상: 목표 점수 달성 시 보너스 점수</div>
+      <button class="btn primary sm" id="chestBtn" disabled>🎁 Reward Chest · Complete the mission to open</button>
+      <div class="tip" id="rewardText">Stage reward: bonus points for reaching your target</div>
     </div>
   </section>
  </aside>
 </div>
-<footer>NoStress Match Puzzle · 반짝이는 보석과 연쇄 콤보를 즐기는 퍼즐</footer>
+<footer>NoStress Match Puzzle · A relaxing jewel puzzle with sparkling combos</footer>
 </div>
 <div class="toast" id="toast"></div>
-<div class="modalbg" id="modal"><div class="modal"><h2 id="modalTitle">안내</h2><p id="modalText"></p><div class="modalactions"><button class="btn" id="modalCancel">닫기</button><button class="btn primary" id="modalOK">확인</button></div></div></div>
+<div class="modalbg" id="modal"><div class="modal"><h2 id="modalTitle">Notice</h2><p id="modalText"></p><div class="modalactions"><button class="btn" id="modalCancel">Close</button><button class="btn primary" id="modalOK">OK</button></div></div></div>
 <script>
 (()=>{
 'use strict';
@@ -121,7 +121,7 @@ function toast(t){$('toast').textContent=t;$('toast').classList.add('show');clea
 function playTone(freq=620,duration=.11,type='sine',vol=.045){if(!opt.sound)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=playTone.ctx||(playTone.ctx=new C());const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(freq,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(Math.max(90,freq*.68),ctx.currentTime+duration);g.gain.setValueAtTime(vol,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+duration)}catch(e){}}
 function burstFX(r,c,points=12,special=false){if(!opt.motion||opt.fx==='low'&&special===false)return;const layer=$('fxLayer'),cell=$('board').querySelector(`[data-r="${r}"][data-c="${c}"]`),wrap=$('boardwrap');if(!cell||!layer)return;const a=cell.getBoundingClientRect(),b=wrap.getBoundingClientRect(),x=a.left-b.left+a.width/2,y=a.top-b.top+a.height/2;const count=opt.fx==='high'?points*2:points;for(let i=0;i<count;i++){const p=document.createElement('i');p.className='spark';p.style.left=x+'px';p.style.top=y+'px';const angle=Math.PI*2*i/count,dist=(opt.fx==='high'?48:34)+Math.random()*28;p.style.setProperty('--dx',Math.cos(angle)*dist+'px');p.style.setProperty('--dy',Math.sin(angle)*dist+'px');p.style.background=['#fff','#ffe18a','#8cf0cc','#a5d8ff','#ff9eba'][i%5];layer.append(p);setTimeout(()=>p.remove(),750)}}
 function floatScore(text){if(!opt.motion)return;const el=document.createElement('div');el.className='floating-score';el.textContent=text;el.style.left='50%';el.style.top='45%';$('fxLayer').append(el);setTimeout(()=>el.remove(),950)}
-function updateMission(){const target=30,colors=['빨간','파란','초록','노란','보라','주황'],idx=(Math.floor((Math.max(0,score)/5000))%Math.max(1,opt.colors));$('stageLabel').textContent='STAGE '+(Math.floor(score/5000)+1);$('missionTitle').textContent='오늘의 보석 미션';$('missionText').textContent=colors[idx]+' 보석 '+target+'개 모으기';$('missionCount').textContent=Math.min(missionCount,target)+' / '+target;$('missionBar').style.width=Math.min(100,missionCount/target*100)+'%';$('chestBtn').disabled=missionCount<target||missionClaimed;$('chestBtn').textContent=missionClaimed?'✅ 보상 수령 완료':'🎁 보상 상자 열기';$('rewardText').textContent='미션 보상: '+(500+Math.floor(score/5000)*250).toLocaleString()+'점 보너스';}
+function updateMission(){const target=30,colors=['red','blue','green','yellow','purple','orange'],idx=(Math.floor((Math.max(0,score)/5000))%Math.max(1,opt.colors));$('stageLabel').textContent='STAGE '+(Math.floor(score/5000)+1);$('missionTitle').textContent='Gem Mission';$('missionText').textContent='Collect '+target+' '+colors[idx]+' gems';$('missionCount').textContent=Math.min(missionCount,target)+' / '+target;$('missionBar').style.width=Math.min(100,missionCount/target*100)+'%';$('chestBtn').disabled=missionCount<target||missionClaimed;$('chestBtn').textContent=missionClaimed?'✅ Reward Claimed':'🎁 Open Reward Chest';$('rewardText').textContent='Mission reward: '+(500+Math.floor(score/5000)*250).toLocaleString()+' bonus points';}
 
 function randColor(){return Math.floor(Math.random()*Number(opt.colors))}
 function freshCell(){return {c:randColor(),s:''}}
@@ -133,10 +133,10 @@ return {found,groups}}
 function hasMove(b=board){for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){for(const [dr,dc] of [[1,0],[0,1]]){let rr=r+dr,cc=c+dc;if(rr>=SIZE||cc>=SIZE)continue;[b[r][c],b[rr][cc]]=[b[rr][cc],b[r][c]];let ok=matches(b).found.size>0;[b[r][c],b[rr][cc]]=[b[rr][cc],b[r][c]];if(ok)return true}}return false}
 function findMove(){for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++)for(const [dr,dc] of [[1,0],[0,1]]){let rr=r+dr,cc=c+dc;if(rr>=SIZE||cc>=SIZE)continue;[board[r][c],board[rr][cc]]=[board[rr][cc],board[r][c]];let ok=matches().found.size>0;[board[r][c],board[rr][cc]]=[board[rr][cc],board[r][c]];if(ok)return [[r,c],[rr,cc]]}return null}
 function ensureMoves(){let tries=0;while(!hasMove()&&tries++<30)board=makeBoard()}
-function render(){const root=$('board');root.innerHTML='';for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){const cell=board[r][c],el=document.createElement('button');el.className='cell'+(selected&&selected[0]===r&&selected[1]===c?' selected':'');el.type='button';el.setAttribute('role','gridcell');el.setAttribute('aria-label',cell?COLORS[cell.c]+' 보석':'빈칸');el.dataset.r=r;el.dataset.c=c;if(cell){const gem=document.createElement('span');gem.className='gem '+COLORS[cell.c]+(cell.s?' special':'');gem.textContent=opt.shape?SYMBOLS[cell.c]:'';if(cell.s==='line')gem.textContent=opt.shape?'↕':'✦';if(cell.s==='burst')gem.textContent=opt.shape?'✹':'💥';el.append(gem)}else el.classList.add('empty');root.append(el)}
-$('score').textContent=score.toLocaleString();$('best').textContent='최고 기록 '+best.toLocaleString();$('moves').textContent=opt.moves?Math.max(0,30-moves):'∞';$('goal').textContent=opt.goal?opt.goal.toLocaleString():'없음';$('goalhint').textContent=opt.goal?'목표까지 '+Math.max(0,opt.goal-score).toLocaleString():'자유 플레이';$('combo').textContent='x'+combo;$('modeLabel').textContent=opt.timer?'타임 챌린지':opt.moves?'이동 제한 모드':'편안한 모드';$('undoBtn').disabled=!undoState;$('progressText').textContent=opt.goal?(score>=opt.goal?'목표 달성! 계속 플레이할 수 있어요.':`목표 점수까지 ${Math.max(0,opt.goal-score).toLocaleString()}점 남았어요.`):'자유롭게 점수를 쌓아보세요.';$('progressBar').style.width=opt.goal?Math.min(100,score/opt.goal*100)+'%':'0%';updateMission();document.body.classList.toggle('reduced-fx',!opt.motion);if(opt.timer)$('status').textContent='남은 시간 '+Math.max(0,opt.time-seconds)+'초 · 시간 제한은 옵션에서 끌 수 있어요.'}
+function render(){const root=$('board');root.innerHTML='';for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){const cell=board[r][c],el=document.createElement('button');el.className='cell'+(selected&&selected[0]===r&&selected[1]===c?' selected':'');el.type='button';el.setAttribute('role','gridcell');el.setAttribute('aria-label',cell?COLORS[cell.c]+' gem':'Empty cell');el.dataset.r=r;el.dataset.c=c;if(cell){const gem=document.createElement('span');gem.className='gem '+COLORS[cell.c]+(cell.s?' special':'');gem.textContent=opt.shape?SYMBOLS[cell.c]:'';if(cell.s==='line')gem.textContent=opt.shape?'↕':'✦';if(cell.s==='burst')gem.textContent=opt.shape?'✹':'💥';el.append(gem)}else el.classList.add('empty');root.append(el)}
+$('score').textContent=score.toLocaleString();$('best').textContent='Best: '+best.toLocaleString();$('moves').textContent=opt.moves?Math.max(0,30-moves):'∞';$('goal').textContent=opt.goal?opt.goal.toLocaleString():'None';$('goalhint').textContent=opt.goal?'To go: '+Math.max(0,opt.goal-score).toLocaleString():'Free Play';$('combo').textContent='x'+combo;$('modeLabel').textContent=opt.timer?'Time Challenge':opt.moves?'Move Limit Mode':'Relaxed Mode';$('undoBtn').disabled=!undoState;$('progressText').textContent=opt.goal?(score>=opt.goal?'Target reached! You can keep playing.':`Points to target: ${Math.max(0,opt.goal-score).toLocaleString()}`):'Play freely and build your score.';$('progressBar').style.width=opt.goal?Math.min(100,score/opt.goal*100)+'%':'0%';updateMission();document.body.classList.toggle('reduced-fx',!opt.motion);if(opt.timer)$('status').textContent='Time left: '+Math.max(0,opt.time-seconds)+' sec · You can turn off the timer in Options.'}
 function saveSnapshot(){undoState={board:clone(board),score,moves,combo,seconds};}
-function restoreUndo(){if(!undoState)return;board=clone(undoState.board);score=undoState.score;moves=undoState.moves;combo=undoState.combo;seconds=undoState.seconds;undoState=null;selected=null;gameOver=false;render();toast('한 번 되돌렸어요.')}
+function restoreUndo(){if(!undoState)return;board=clone(undoState.board);score=undoState.score;moves=undoState.moves;combo=undoState.combo;seconds=undoState.seconds;undoState=null;selected=null;gameOver=false;render();toast('Move undone.')}
 function swap(a,b){[board[a[0]][a[1]],board[b[0]][b[1]]]=[board[b[0]][b[1]],board[a[0]][a[1]]]}
 function adjacent(a,b){return Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1])===1}
 function specialCreate(groups){let candidate=null;for(const g of groups){if(g.length>=5){candidate=g[Math.floor(g.length/2)];board[candidate[0]][candidate[1]].s='burst';break}if(g.length===4&&!candidate){candidate=g[Math.floor(g.length/2)];board[candidate[0]][candidate[1]].s='line'}}return candidate}
@@ -150,7 +150,7 @@ function resolve(){
    $('fxLayer').innerHTML='';
    ensureMoves();
    render();
-   if(chain>1){toast('✨ 연쇄 매치 x'+chain+'! 보너스 점수!');playTone(880,.18,'triangle')}
+   if(chain>1){toast('✨ Chain Match x'+chain+'! Bonus points!');playTone(880,.18,'triangle')}
    checkGoal();
  }
  function gravityAndRefill(){
@@ -214,7 +214,7 @@ function resolve(){
    if(chain===1)playTone(560,.10);else playTone(650+chain*90,.14,'triangle');
    if(special){
      const kind=board[special[0]][special[1]].s;
-     toast(kind==='line'?'⚡ 줄을 지우는 특수 보석 생성!':'🌈 주변을 터뜨리는 특수 보석 생성!');
+     toast(kind==='line'?'⚡ Line-clearing special jewel created!':'🌈 Area-clearing special jewel created!');
      playTone(kind==='line'?760:980,.2,'sawtooth');
    }
    // 매치된 보석은 실제 제거. 특수 보석 생성 위치만 보존.
@@ -231,23 +231,23 @@ function resolve(){
  }
  step();
 }
-function checkGoal(){if(opt.goal&&score>=opt.goal){$('status').textContent='🎉 목표 달성! 계속 플레이하거나 새 게임을 시작할 수 있어요.';toast('목표 달성! 축하해요!')}if(opt.moves&&moves>=30&&!gameOver){gameOver=true;ask('이동 횟수를 모두 사용했어요','점수는 저장됐어요. 다시 시작하거나 이동 제한 옵션을 끄고 계속 즐길 수 있어요.',()=>newGame())}}
-function selectCell(r,c){if(gameOver)return;if(!selected){selected=[r,c];render();return}if(selected[0]===r&&selected[1]===c){selected=null;render();return}const target=[r,c],first=selected;selected=null;if(!adjacent(first,target)){selected=target;render();return}saveSnapshot();swap(first,target);if(matches().found.size){moves++;render();resolve()}else{swap(first,target);undoState=null;render();$('status').textContent=opt.invalid?'이 조합은 매치가 되지 않아요. 다른 보석을 골라보세요.':'매치가 되지 않아 원래 자리로 돌아왔어요.';if(!opt.invalid)toast('매치가 만들어지는 이동만 할 수 있어요.');}}
-function hint(){const move=findMove();if(!move){ensureMoves();render();return}selected=null;render();const [a,b]=move;for(const [r,c] of [a,b]){const el=$('board').querySelector(`[data-r="${r}"][data-c="${c}"]`);if(el)el.classList.add('hint')}$('status').textContent='반짝이는 두 보석을 서로 바꿔보세요.'}
-function shuffle(){board=makeBoard();ensureMoves();selected=null;undoState=null;render();toast('새로운 보석 배열을 만들었어요.')}
-function newGame(){if(timerId)clearInterval(timerId);if(hintTimer)clearTimeout(hintTimer);score=0;moves=0;combo=0;seconds=0;missionCount=0;missionClaimed=false;clearedTotal=0;selected=null;undoState=null;gameOver=false;started=true;board=makeBoard();ensureMoves();render();$('status').textContent='새 게임 시작! 서두르지 말고 편안하게 플레이하세요.';if(opt.timer){timerId=setInterval(()=>{seconds++;if(seconds>=opt.time){clearInterval(timerId);gameOver=true;ask('시간이 끝났어요','원한다면 시간 제한을 끄고 자유롭게 계속 즐길 수 있어요.',()=>newGame())}else render()},1000)}if(opt.autoHint)startAutoHint()}
+function checkGoal(){if(opt.goal&&score>=opt.goal){$('status').textContent='🎉 Target reached! Keep playing or start a new game.';toast('Target reached! Congratulations!')}if(opt.moves&&moves>=30&&!gameOver){gameOver=true;ask('You’ve used all your moves','Your score is saved. Start again or turn off the move limit to keep playing.',()=>newGame())}}
+function selectCell(r,c){if(gameOver)return;if(!selected){selected=[r,c];render();return}if(selected[0]===r&&selected[1]===c){selected=null;render();return}const target=[r,c],first=selected;selected=null;if(!adjacent(first,target)){selected=target;render();return}saveSnapshot();swap(first,target);if(matches().found.size){moves++;render();resolve()}else{swap(first,target);undoState=null;render();$('status').textContent=opt.invalid?'No match with that swap. Try another jewel.':'No match. The jewels returned to their original positions.';if(!opt.invalid)toast('Only swaps that create a match are allowed.');}}
+function hint(){const move=findMove();if(!move){ensureMoves();render();return}selected=null;render();const [a,b]=move;for(const [r,c] of [a,b]){const el=$('board').querySelector(`[data-r="${r}"][data-c="${c}"]`);if(el)el.classList.add('hint')}$('status').textContent='Swap the two highlighted jewels.'}
+function shuffle(){board=makeBoard();ensureMoves();selected=null;undoState=null;render();toast('The jewels have been reshuffled.')}
+function newGame(){if(timerId)clearInterval(timerId);if(hintTimer)clearTimeout(hintTimer);score=0;moves=0;combo=0;seconds=0;missionCount=0;missionClaimed=false;clearedTotal=0;selected=null;undoState=null;gameOver=false;started=true;board=makeBoard();ensureMoves();render();$('status').textContent='New game! Take your time and relax.';if(opt.timer){timerId=setInterval(()=>{seconds++;if(seconds>=opt.time){clearInterval(timerId);gameOver=true;ask('Time is up!','You can turn off the time limit and continue playing freely.',()=>newGame())}else render()},1000)}if(opt.autoHint)startAutoHint()}
 function startAutoHint(){if(hintTimer)clearTimeout(hintTimer);hintTimer=setTimeout(()=>{if(!selected&&!gameOver)hint();},12000)}
 function ask(title,text,cb){$('modalTitle').textContent=title;$('modalText').textContent=text;$('modal').classList.add('show');modalCallback=cb||null}
 $('modalCancel').onclick=()=>{$('modal').classList.remove('show');modalCallback=null};$('modalOK').onclick=()=>{const cb=modalCallback;$('modal').classList.remove('show');modalCallback=null;if(cb)cb()};
 $('board').addEventListener('click',e=>{const cell=e.target.closest('.cell');if(!cell)return;selectCell(Number(cell.dataset.r),Number(cell.dataset.c));if(opt.autoHint)startAutoHint()});
-$('chestBtn').onclick=()=>{if(missionCount>=30&&!missionClaimed){const reward=500+Math.floor(score/5000)*250;score+=reward;missionClaimed=true;playTone(1040,.28,'triangle');toast('🎁 보상 획득! +'+reward.toLocaleString()+'점');render()}};
-$('undoBtn').onclick=restoreUndo;$('hintBtn').onclick=hint;$('shuffleBtn').onclick=shuffle;$('newBtn').onclick=()=>ask('새 게임','현재 판을 끝내고 새 게임을 시작할까요?',newGame);
-$('saveBtn').onclick=()=>{try{localStorage.setItem('nsmatchSave',JSON.stringify({board,score,moves,combo,seconds,opt,missionCount,missionClaimed,clearedTotal}));toast('현재 게임을 저장했어요.')}catch(e){toast('저장할 수 없습니다.')}};
-function bindOption(id,key,convert){$(id).addEventListener('change',()=>{opt[key]=convert?convert($(id).value):$(id).checked;if(key==='timer'){if(timerId)clearInterval(timerId);timerId=null;seconds=0;if(opt.timer){timerId=setInterval(()=>{seconds++;if(seconds>=opt.time){clearInterval(timerId);gameOver=true;ask('시간이 끝났어요','시간 제한을 끄거나 새 게임을 시작할 수 있어요.',()=>newGame())}render()},1000)}}if(key==='autoHint'&&opt.autoHint)startAutoHint();render()})}
+$('chestBtn').onclick=()=>{if(missionCount>=30&&!missionClaimed){const reward=500+Math.floor(score/5000)*250;score+=reward;missionClaimed=true;playTone(1040,.28,'triangle');toast('🎁 Reward claimed! +'+reward.toLocaleString()+' pts');render()}};
+$('undoBtn').onclick=restoreUndo;$('hintBtn').onclick=hint;$('shuffleBtn').onclick=shuffle;$('newBtn').onclick=()=>ask('New Game','End this game and start a new one?',newGame);
+$('saveBtn').onclick=()=>{try{localStorage.setItem('nsmatchSave',JSON.stringify({board,score,moves,combo,seconds,opt,missionCount,missionClaimed,clearedTotal}));toast('Game saved.')}catch(e){toast('Unable to save the game.')}};
+function bindOption(id,key,convert){$(id).addEventListener('change',()=>{opt[key]=convert?convert($(id).value):$(id).checked;if(key==='timer'){if(timerId)clearInterval(timerId);timerId=null;seconds=0;if(opt.timer){timerId=setInterval(()=>{seconds++;if(seconds>=opt.time){clearInterval(timerId);gameOver=true;ask('Time is up!','Turn off the time limit or start a new game.',()=>newGame())}render()},1000)}}if(key==='autoHint'&&opt.autoHint)startAutoHint();render()})}
 bindOption('timerOpt','timer');bindOption('movesOpt','moves');bindOption('invalidOpt','invalid');bindOption('autoHintOpt','autoHint');bindOption('soundOpt','sound');bindOption('motionOpt','motion');bindOption('shapeOpt','shape');bindOption('fxOpt','fx');bindOption('colorsOpt','colors',Number);bindOption('goalOpt','goal',Number);bindOption('timeOpt','time',Number);
 function applyOptions(){for(const [id,key] of [['timerOpt','timer'],['movesOpt','moves'],['invalidOpt','invalid'],['autoHintOpt','autoHint'],['soundOpt','sound'],['motionOpt','motion'],['shapeOpt','shape'],['fxOpt','fx'],['colorsOpt','colors'],['goalOpt','goal'],['timeOpt','time']])$(id).type==='checkbox'?$(id).checked=opt[key]:$(id).value=String(opt[key])}
 try{const raw=localStorage.getItem('nsmatchSave');if(raw){const data=JSON.parse(raw);if(data&&Array.isArray(data.board)&&data.board.length===SIZE){board=data.board;score=Number(data.score)||0;moves=Number(data.moves)||0;combo=Number(data.combo)||0;seconds=Number(data.seconds)||0;missionCount=Number(data.missionCount)||0;missionClaimed=!!data.missionClaimed;clearedTotal=Number(data.clearedTotal)||0;opt={...defaults,...data.opt};started=true}}}catch(e){}
-applyOptions();if(!board.length)newGame();else{ensureMoves();render();$('status').textContent='저장된 게임을 불러왔어요.';if(opt.timer){timerId=setInterval(()=>{seconds++;if(seconds>=opt.time){clearInterval(timerId);gameOver=true;ask('시간이 끝났어요','시간 제한을 끄거나 새 게임을 시작할 수 있어요.',()=>newGame())}render()},1000)}}
+applyOptions();if(!board.length)newGame();else{ensureMoves();render();$('status').textContent='Saved game loaded.';if(opt.timer){timerId=setInterval(()=>{seconds++;if(seconds>=opt.time){clearInterval(timerId);gameOver=true;ask('Time is up!','Turn off the time limit or start a new game.',()=>newGame())}render()},1000)}}
 })();
 </script>
 </body>
